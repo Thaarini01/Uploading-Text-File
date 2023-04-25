@@ -1,0 +1,37 @@
+from flask import Flask, render_template, request
+import datetime
+import sqlite3
+import os
+
+app = Flask(__name__)
+
+conn = sqlite3.connect('Split1.db', check_same_thread=False)
+print("Opened database successfully")
+
+conn.execute('CREATE TABLE if not exists Domain_Info1(FILE_NAME TEXT, DATE_TIME TEXT, DOMAIN_NAME TEXT)')
+print("Table created successfully")
+
+@app.route('/')
+def main():
+    return render_template("index.html")
+
+@app.route('/success', methods=['POST', 'GET'])
+def success():
+    print("success")
+    if request.method == 'POST':
+        cur = conn.cursor()
+        f = request.files['file']
+        f.save(f.filename)
+        date = datetime.datetime.now()
+        with open(f.filename, 'r') as file:
+            content = file.readlines()
+            print(content)
+            for line in content:
+                cur.execute("INSERT INTO Domain_Info1(FILE_NAME, DATE_TIME, DOMAIN_NAME) VALUES (?,?,?)", (f.filename, date, line.strip()))
+                conn.commit()
+            print(content, line)
+        return render_template("Acknowledgement.html", name=f.filename, day=date, content=content)
+    return "No data available for the selected date range."
+
+if __name__ == '__main__':
+    app.run(debug=True)
