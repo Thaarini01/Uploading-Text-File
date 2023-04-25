@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>success</title>
+	
+</head>
+<div class="container">
+
+
+	<p>File uploaded successfully</p>
+	<p>File Name: {{name}}</p>
+	<p>Date And Time: {{day}}</p>
+	 <div class="tabledata">
+
+	 
+		<table class="list">
+			<thead>
+				<tr>
+					<th >UPLOADED_DOMAIN_NAMES</th>
+					<th>DATE_TIME</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% if content %}
+					{% for line in content %}
+						<tr>
+							<td>{{ line }}</td>
+							<td>{{ day.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+						</tr>
+					{% endfor %}
+				{% endif %}
+			</tbody>
+		</table>
+	</div>
+	</div>
+<style>
+	table{
+		text-align: center;
+		border-collapse: collapse;
+		
+		row-gap:30px;
+	}
+	td{
+  border: 1px solid;
+ 
+  text-align:justify;
+  padding-left: 1em;
+  padding-right:1em;
+
+}
+th{
+	border: 1px solid;
+	width:4px;
+	height:45px;
+     
+}
+
+.container{
+	text-align:center;
+}
+.tabledata{
+	width:40vw;
+	height:55vh;
+}
+
+.list{
+	margin-left: 78%;
+	margin-right: auto;
+}
+</style>
+
+<img src="{{ url_for('static', filename='plot.png') }}">
+
+</html>
